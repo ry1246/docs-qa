@@ -1,0 +1,5 @@
+{
+  "name": "docs-qa",
+  "private": true,
+  "workspaces": ["apps/*"]
+}

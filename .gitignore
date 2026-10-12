@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.env
+pgdata/
+.DS_Store
+
+CLAUDE.md
+task.md
