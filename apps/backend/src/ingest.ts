@@ -10,6 +10,7 @@ async function main() {
   const docsDir = process.env.DOCS_DIR;
   if (!databaseUrl) throw new Error('DATABASE_URL is not set');
   if (!docsDir) throw new Error('DOCS_DIR is not set');
+  const force = process.argv.includes('--force');
 
   const client = new pg.Client({ connectionString: databaseUrl });
   await client.connect();
@@ -18,11 +19,24 @@ async function main() {
     const files = await listMarkdownFiles(docsDir);
     console.log(`found ${files.length} files`);
 
+    const { rows } = await client.query<{ source_path: string; content_hash: string }>(
+      'SELECT source_path, min(content_hash) AS content_hash FROM chunks GROUP BY source_path',
+    );
+    const existing = new Map(rows.map(r => [r.source_path, r.content_hash]));
+
+    let skipped = 0;
     for (const rel of files) {
       const text = await readFile(path.join(docsDir, rel), 'utf8');
       const hash = sha256(text);
+
+      if (!force && existing.get(rel) === hash) {
+        skipped++;
+        continue;
+      }
+
       const chunks = chunkMarkdown(text);
       if (chunks.length === 0) {
+        await client.query('DELETE FROM chunks WHERE source_path = $1', [rel]);
         console.log(`empty  ${rel}`);
         continue;
       }
@@ -48,6 +62,15 @@ async function main() {
         throw err;
       }
     }
+
+    const present = new Set(files);
+    const removed = [...existing.keys()].filter(p => !present.has(p));
+    if (removed.length > 0) {
+      await client.query('DELETE FROM chunks WHERE source_path = ANY($1::text[])', [removed]);
+      for (const p of removed) console.log(`removed ${p}`);
+    }
+
+    console.log(`done: skipped ${skipped}, removed ${removed.length}`);
   } finally {
     await client.end();
   }
