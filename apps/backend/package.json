@@ -8,6 +8,7 @@
     "start": "node dist/index.js",
     "migrate": "tsx --env-file=../../.env src/migrate.ts",
     "ingest": "tsx --env-file=../../.env src/ingest.ts",
+    "search": "tsx --env-file=../../.env src/search-cli.ts",
     "test": "vitest run"
   },
   "dependencies": {
