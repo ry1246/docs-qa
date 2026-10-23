@@ -20,29 +20,29 @@ export async function searchChunks(
   question: string,
   k = DEFAULT_TOP_K,
 ): Promise<SearchHit[]> {
-    const [vec] = await embed([question], 'query');
-    const literal = toVectorLiteral(vec);
+  const [vec] = await embed([question], 'query');
+  const literal = toVectorLiteral(vec);
 
-    const { rows } = await pool.query<{
-      source_path: string;
-      heading: string;
-      chunk_index: number;
-      content: string;
-      score: number;
-    }>(
-      `SELECT source_path, heading, chunk_index, content,
-         1 - (embedding <=> $1::vector) AS score
-       FROM chunks
-       ORDER BY embedding <=> $1::vector
-       LIMIT $2`,
-       [literal, k],
-    );
+  const { rows } = await pool.query<{
+    source_path: string;
+    heading: string;
+    chunk_index: number;
+    content: string;
+    score: number;
+  }>(
+    `SELECT source_path, heading, chunk_index, content,
+      1 - (embedding <=> $1::vector) AS score
+    FROM chunks
+    ORDER BY embedding <=> $1::vector
+    LIMIT $2`,
+    [literal, k],
+  );
 
-    return rows.map(r => ({
-      sourcePath: r.source_path,
-      heading: r.heading,
-      chunkIndex: r.chunk_index,
-      content: r.content,
-      score: Number(r.score),
-    }));
-  }
+  return rows.map(r => ({
+    sourcePath: r.source_path,
+    heading: r.heading,
+    chunkIndex: r.chunk_index,
+    content: r.content,
+    score: Number(r.score),
+  }));
+}
