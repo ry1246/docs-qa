@@ -1,0 +1,26 @@
+[
+  {
+    "question": "Vercelにデプロイする手順を教えて",
+    "expected": ["Webツールにリリースガイド.md"]
+  },
+  {
+    "question": "検索エンジンにサイトを載せないようにするにはどうする？",
+    "expected": ["限定的公開の実装ガイド.md"]
+  },
+  {
+    "question": "Supabaseで認証を実装する流れは？",
+    "expected": ["限定的公開の実装ガイド.md"]
+  },
+  {
+    "question": "転職に向けてGo言語はいつ頃どのくらい学ぶ予定？",
+    "expected": ["ROADMAP.md"]
+  },
+  {
+    "question": "Reactの学習で押さえるべき内容は？",
+    "expected": ["技術スタック学習ガイド.md", "ROADMAP.md"]
+  },
+  {
+    "question": "このめもにRustの学習計画は書いてある？",
+    "expected": []
+  }
+]
