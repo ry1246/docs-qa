@@ -1,7 +1,7 @@
 [
   {
     "question": "Vercelにデプロイする手順を教えて",
-    "expected": ["Webツールにリリースガイド.md"]
+    "expected": ["Webツールリリースガイド.md"]
   },
   {
     "question": "検索エンジンにサイトを載せないようにするにはどうする？",
