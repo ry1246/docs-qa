@@ -9,6 +9,7 @@
     "migrate": "tsx --env-file=../../.env src/migrate.ts",
     "ingest": "tsx --env-file=../../.env src/ingest.ts",
     "search": "tsx --env-file=../../.env src/search-cli.ts",
+    "eval": "tsx --env-file=../../.env src/eval.ts",
     "test": "vitest run"
   },
   "dependencies": {
